@@ -17,19 +17,19 @@ std::unordered_set<std::string> onlyList;     // List for '-o'-flag
 // Help function
 void showHelp() {
     std::cout << std::endl;
-    std::cout << " " << BOLD << "✨ Appletree - Directory Tree Viewer ✨\n" << RESET;
+    std::cout << " " << BOLD << "✨ appletree - Directory Tree Viewer ✨\n" << RESET;
     std::cout << " Usage:\n";
-    std::cout << "   ./appletree [path] [options]\n\n";
+    std::cout << "   appletree [path] [options]\n\n";
 
     std::cout << " Options:\n";
     std::cout << "   -e <name>    Exclude files or directories from the tree output\n";
     std::cout << "   -o <name>    Show only the specified files or directories\n\n";
 
     std::cout << " Examples:\n";
-    std::cout << "   ./appletree                     Show the tree of the current directory\n";
-    std::cout << "   ./appletree /path/to/folder     Show the tree of the specified directory\n";
-    std::cout << "   ./appletree -e node_modules     Exclude 'node_modules' from the tree\n";
-    std::cout << "   ./appletree -o src include      Show only 'src' and 'include' directories\n\n";
+    std::cout << "   appletree                     Show the tree of the current directory\n";
+    std::cout << "   appletree /path/to/folder     Show the tree of the specified directory\n";
+    std::cout << "   appletree -e node_modules     Exclude 'node_modules' from the tree\n";
+    std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n\n";
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
