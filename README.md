@@ -90,7 +90,7 @@ appletree help
  │   ├── utils.h
  │   └── utils.cpp
  ├── include
- │   ├── config.h
+ │   └── config.h
  ├── README.md
  └── Makefile
 ```
