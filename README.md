@@ -23,18 +23,18 @@ git clone https://github.com/mattialosz/appletree.git
 cd appletree
 ```
 
-### Using the Precompiled Executable
-You can directly use the provided appletree executable:
-```bash
-./appletree
-```
-
-### Compiling from Source (Optional)
-If you prefer to compile the source code yourself, run:
+### Compiling from Source 
+If you prefer to compile the source code yourself, go to the folder and run:
 ```bash
 g++ -std=c++17 -o appletree main.cpp
 ```
 Now, you have an executable appletree that you can run.
+
+### Using the Precompiled Executable (Optional)
+You can directly use the provided appletree executable:
+```bash
+./appletree
+```
 
 ## 🚀 Making Appletree Globally Accessible
 ### Local Execution
