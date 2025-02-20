@@ -6,7 +6,6 @@
 // Macros for ANSI terminal output style
 #define RESET   "\033[0m"
 #define BOLD    "\033[1m"
-#define YELLOW1 "\033[38;5;220m"
 #define GREY    "\033[38;5;248m"
 
 namespace fs = std::filesystem;
@@ -14,6 +13,29 @@ namespace fs = std::filesystem;
 // Filter for flags/options
 std::unordered_set<std::string> excludeList;  // List for '-e'-flag
 std::unordered_set<std::string> onlyList;     // List for '-o'-flag
+
+// Help function
+void showHelp() {
+    std::cout << std::endl;
+    std::cout << " " << BOLD << "✨ Appletree - Directory Tree Viewer ✨\n" << RESET;
+    std::cout << " Usage:\n";
+    std::cout << "   ./appletree [path] [options]\n\n";
+
+    std::cout << " Options:\n";
+    std::cout << "   -e <name>    Exclude files or directories from the tree output\n";
+    std::cout << "   -o <name>    Show only the specified files or directories\n\n";
+
+    std::cout << " Examples:\n";
+    std::cout << "   ./appletree                     Show the tree of the current directory\n";
+    std::cout << "   ./appletree /path/to/folder     Show the tree of the specified directory\n";
+    std::cout << "   ./appletree -e node_modules     Exclude 'node_modules' from the tree\n";
+    std::cout << "   ./appletree -o src include      Show only 'src' and 'include' directories\n\n";
+
+    std::cout << " For more details, visit:\n";
+    std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
+    std::cout << " 🍏🌳" << std::endl;
+    std::cout << std::endl;
+}
 
 // Function to display the directory as a tree structure with filter options
 void printTree(const fs::path& root, const fs::path& current, const std::string& prefix = "") {
@@ -63,12 +85,22 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
 }
 
 // Parsing CLI arguments
-void parseArgs(int argc, char* argv[], fs::path& root) {
+bool parseArgs(int argc, char* argv[], fs::path& root) {
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 
+        // Show help if the argument is 'help'
+        if (arg == "help") {
+            showHelp();
+            return false; // Stop execution after help message
+        }
+
         // When using '-e'
-        if (arg == "-e" && i + 1 < argc) {
+        if (arg == "-e") {
+            if (i + 1 >= argc || argv[i + 1][0] == '-') {
+                std::cerr << "Error: Missing argument after '-e'. Specify at least one file/folder to exclude.\n";
+                return false;
+            }
             while (++i < argc && argv[i][0] != '-') { // Collect all files/folders to be ignored, stop if a new flag is encountered
                 excludeList.insert(argv[i]);
             }
@@ -76,7 +108,11 @@ void parseArgs(int argc, char* argv[], fs::path& root) {
         }
         
         // When using '-o'
-        else if (arg == "-o" && i + 1 < argc) {
+        else if (arg == "-o") {
+            if (i + 1 >= argc || argv[i + 1][0] == '-') {
+                std::cerr << "Error: Missing argument after '-o'. Specify at least one file/folder to include.\n";
+                return false;
+            }
             while (++i < argc && argv[i][0] != '-') { // Collect all files/folders to be displayed, stop if a new flag is encountered
                 onlyList.insert(argv[i]);
             }
@@ -88,18 +124,39 @@ void parseArgs(int argc, char* argv[], fs::path& root) {
             root = fs::absolute(argv[i]);
         }
     }
+
+    // Ensure that both '-e' and '-o' were used correctly
+    if (excludeList.empty() && onlyList.empty() && argc > 1) {
+        for (int i = 1; i < argc; ++i) {
+            std::string arg = argv[i];
+            if (arg == "-e" || arg == "-o") {
+                std::cerr << "Error: Missing argument after '" << arg << "'.\n";
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 // Main program
 int main(int argc, char* argv[]) {
     fs::path root;
 
-    // Parse CLI arguments
-    parseArgs(argc, argv, root);
+    // Parse CLI arguments and check for errors
+    if (!parseArgs(argc, argv, root)) {
+        return 1; // Exit on error
+    }
 
     // General case use local directory path
     if (root.empty()) {
         root = fs::current_path();
+    }
+
+    // Check if the given path exists
+    if (!fs::exists(root)) {
+        std::cerr << "Error: The specified path '" << root.string() << "' does not exist. Try again with a valid path.\n";
+        return 1;
     }
 
     std::cout << std::endl;
