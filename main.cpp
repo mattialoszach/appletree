@@ -3,6 +3,12 @@
 #include <vector>
 #include <unordered_set>
 
+// Macros for ANSI terminal output style
+#define RESET   "\033[0m"
+#define BOLD    "\033[1m"
+#define YELLOW1 "\033[38;5;220m"
+#define GREY    "\033[38;5;248m"
+
 namespace fs = std::filesystem;
 
 // Filter for flags/options
@@ -40,7 +46,14 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     // Iterate through collected entries and build tree structure
     for (size_t i = 0; i < entries.size(); ++i) {
         bool isLast = (i == entries.size() - 1);
-        std::cout << prefix << (isLast ? "└── " : "├── ") << entries[i].filename().string() << "\n";
+        // std::cout << prefix << (isLast ? "└── " : "├── ") << entries[i].filename().string() << "\n";
+        std::cout << " " << GREY << prefix << (isLast ? "└── " : "├── ") << RESET;
+        if (fs::is_directory(entries[i])) {
+            std::cout << BOLD << entries[i].filename().string() << RESET << "\n";
+        } else {
+            std::cout << entries[i].filename().string() << "\n";
+        }
+        
 
         // If directory then we call function recursively
         if (fs::is_directory(entries[i])) {
@@ -89,11 +102,15 @@ int main(int argc, char* argv[]) {
         root = fs::current_path();
     }
 
+    std::cout << std::endl;
+
     // Display root directory
-    std::cout << root.filename().string() << "\n";
+    std::cout << " " << BOLD << root.filename().string() << RESET << "\n";
 
     // Start recursive scan
     printTree(root, root);
+
+    std::cout << std::endl;
 
     return 0;
 }
