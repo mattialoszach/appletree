@@ -3,7 +3,7 @@
 'appletree' is a lightweight and efficient terminal-based directory tree viewer for macOS.  
 It helps you visualize folder structures with optional file filtering.
 
-<img src="img/terminal.png" alt="appletree Screenshot" width="300">
+<img src="img/terminal.png" alt="appletree Screenshot" width="600">
 
 ## 📌 Features
 - 📂 Display a tree-like structure of directories and files
