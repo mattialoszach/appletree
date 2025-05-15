@@ -23,18 +23,38 @@ git clone https://github.com/mattialosz/appletree.git
 cd appletree
 ```
 
+### Simple Installation using Makefile
+
+- You can compile and install `geofetch` locally using the provided `Makefile`:
+
+```bash
+make
+sudo make install
+```
+The binary will be installed to /usr/local/bin/geofetch by default
+
+
+- To remove:
+```bash
+sudo make uninstall
+```
+### Further options:
+To run without installing:
+```bash
+make run
+```
+Just create a binary:
+```bash
+make
+```
+
+
 ### Compiling from Source 
 If you prefer to compile the source code yourself, go to the folder and run:
 ```bash
 g++ -std=c++17 -o appletree main.cpp
 ```
 Now, you have an executable appletree that you can run.
-
-### Using the Precompiled Executable (Optional)
-You can directly use the provided appletree executable:
-```bash
-./appletree
-```
 
 ## 🚀 Making Appletree Globally Accessible
 ### Local Execution
