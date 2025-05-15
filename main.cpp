@@ -33,7 +33,7 @@ void showHelp() {
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
-    std::cout << " 🍏🌳" << std::endl;
+    std::cout << " \033[47;30m🍏🌳 Created by Mattia Loszach" << RESET << std::endl;
     std::cout << std::endl;
 }
 
