@@ -90,6 +90,13 @@ appletree -e node_modules
 (This will exclude the node_modules folder from the output.)
 
 
+- Exclude Hidden Files/Folders
+```bash
+appletree -e .
+```
+(This will automatically exclude all hidden files/folders from the output.)
+
+
 - Show Only Selected Files/Folders (example)
 ```bash
 appletree -o src include
