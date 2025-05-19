@@ -23,6 +23,7 @@ void showHelp() {
 
     std::cout << " Options:\n";
     std::cout << "   -e <name>    Exclude files or directories from the tree output\n";
+    std::cout << "   -e .         Exclude hidden files or directories from the tree output\n";
     std::cout << "   -o <name>    Show only the specified files or directories\n\n";
 
     std::cout << " Examples:\n";
@@ -44,6 +45,10 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     // Collect all files & folders within the root directory
     for (const auto& entry : fs::directory_iterator(current)) {
         std::string filename = entry.path().filename().string();
+
+        if (!filename.empty() && excludeList.count(".") && filename[0] == '.') {
+            continue;
+        }
 
         // Use '-e' to ignore files/folders
         if (!excludeList.empty() && excludeList.count(filename)) continue;
