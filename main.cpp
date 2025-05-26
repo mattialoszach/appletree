@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <vector>
 #include <unordered_set>
+#include <algorithm>
 
 // Macros for ANSI terminal output style
 #define RESET   "\033[0m"
