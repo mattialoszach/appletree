@@ -10,7 +10,7 @@ It helps you visualize folder structures with optional file filtering.
 - 📂 Display a tree-like structure of directories and files
 - ❌ Exclude specific files or folders (`-e`)
 - ✅ Show only selected files or folders (`-o`)
-- 🔧 Designed for **macOS**
+- 🔧 Designed for **macOS** & **Linux**
 - ⚡ Fast and lightweight
 
 ---
