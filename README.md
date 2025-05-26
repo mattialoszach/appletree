@@ -1,6 +1,6 @@
 # appletree - A Simple Directory Tree Viewer 🍏🌳✨
 
-'appletree' is a lightweight and efficient terminal-based directory tree viewer for macOS.  
+'appletree' is a lightweight and efficient terminal-based directory tree viewer for macOS & Linux.  
 It helps you visualize folder structures with optional file filtering.
 
 <img src="img/terminal2.png" alt="appletree Screenshot" width="600">
@@ -26,13 +26,13 @@ cd appletree
 
 ### Simple Installation using Makefile
 
-- You can compile and install `geofetch` locally using the provided `Makefile`:
+- You can compile and install `appletree` locally using the provided `Makefile`:
 
 ```bash
 make
 sudo make install
 ```
-The binary will be installed to /usr/local/bin/geofetch by default
+The binary will be installed to /usr/local/bin/appletree by default
 
 
 - To remove:
@@ -56,6 +56,11 @@ If you prefer to compile the source code yourself, go to the folder and run:
 g++ -std=c++17 -o appletree main.cpp
 ```
 Now, you have an executable appletree that you can run.
+
+If you are using older versions of the GCC compiler and encounter error messages related to the implementation of std::filesystem you can tell the linker about the right library by just adding a flag:
+```bash
+g++ -std=c++17 -o appletree main.cpp -lstdc++fs
+```
 
 ## 🚀 Making Appletree Globally Accessible
 ### Local Execution
