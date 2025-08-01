@@ -5,7 +5,6 @@ It helps you visualize folder structures with optional file filtering.
 
 <img src="img/terminal1.png" alt="appletree Screenshot" width="600">
 <img src="img/terminal2.png" alt="appletree Screenshot" width="600">
-<img src="img/terminal.png" alt="appletree Screenshot" width="600">
 
 ## 📌 Features
 - 📂 Display a tree-like structure of directories and files
