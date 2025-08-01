@@ -7,7 +7,6 @@
 // Macros for ANSI terminal output style
 #define RESET   "\033[0m"
 #define BOLD    "\033[1m"
-#define GREY    "\033[38;5;248m"
 
 namespace fs = std::filesystem;
 
@@ -35,8 +34,7 @@ void showHelp() {
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
-    std::cout << " \033[47;30m🍏🌳 Created by Mattia Loszach" << RESET << std::endl;
-    std::cout << std::endl;
+    std::cout << " \033[47;30m Created by @mattialoszach " << RESET << std::endl;
 }
 
 // Function to display the directory as a tree structure with filter options
@@ -75,9 +73,9 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     for (size_t i = 0; i < entries.size(); ++i) {
         bool isLast = (i == entries.size() - 1);
         // std::cout << prefix << (isLast ? "└── " : "├── ") << entries[i].filename().string() << "\n";
-        std::cout << " " << GREY << prefix << (isLast ? "└── " : "├── ") << RESET;
+        std::cout << " " << prefix << (isLast ? "└── " : "├── ") << RESET;
         if (fs::is_directory(entries[i])) {
-            std::cout << BOLD << entries[i].filename().string() << RESET << "\n";
+            std::cout << BOLD << entries[i].filename().string() << "/" << RESET << "\n";
         } else {
             std::cout << entries[i].filename().string() << "\n";
         }
@@ -168,12 +166,10 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl;
 
     // Display root directory
-    std::cout << " " << BOLD << root.filename().string() << RESET << "\n";
+    std::cout << " " << BOLD << root.filename().string() << "/" << RESET << "\n";
 
     // Start recursive scan
     printTree(root, root);
-
-    std::cout << std::endl;
 
     return 0;
 }
