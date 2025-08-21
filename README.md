@@ -115,6 +115,32 @@ appletree help
 ```
 (Shows detailed usage instructions.)
 
+---
+
+You can change how the tree looks with the -s flag.
+Available options:
+- classic (default)
+- round
+ 
+Change Style/Format
+```bash
+appletree -s round
+```
+
+## ⚡ Pro Tip: Aliases for faster workflow
+For maximum efficiency, you can add an alias to your shell config (.zshrc, .bashrc, etc.).
+This way you don’t have to type long commands every time.
+
+Example (zsh):
+```bash
+alias atr="appletree -e . __pycache__ -s round"
+```
+Now you can simply type:
+```bash
+atr
+```
+…and instantly get your customized tree view 🚀
+
 ## 📜 Example Output
 ```bash
  my_project
