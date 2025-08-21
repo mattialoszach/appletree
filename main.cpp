@@ -14,6 +14,26 @@ namespace fs = std::filesystem;
 std::unordered_set<std::string> excludeList;  // List for '-e'-flag
 std::unordered_set<std::string> onlyList;     // List for '-o'-flag
 
+// Style/Format
+enum class Style {classic, round};
+Style currentStyle = Style::classic; // Default style
+
+std::string branch(bool isLast) {
+    if (currentStyle == Style::round) {
+        return isLast ? "╰── " : "├── ";
+    } else {
+        return isLast ? "└── " : "├── ";
+    }
+}
+
+std::string vertical(bool isLast) {
+    if (currentStyle == Style::round) {
+        return isLast ? "    " : "│   ";
+    } else {
+        return isLast ? "    " : "│   ";
+    }
+}
+
 // Help function
 void showHelp() {
     std::cout << std::endl;
@@ -26,11 +46,16 @@ void showHelp() {
     std::cout << "   -e .         Exclude hidden files or directories from the tree output\n";
     std::cout << "   -o <name>    Show only the specified files or directories\n\n";
 
+    std::cout << " Styles:\n";
+    std::cout << "   Available options ['classic' (default), 'round']\n";
+    std::cout << "   -s <style>    Change output style/format\n";
+
     std::cout << " Examples:\n";
     std::cout << "   appletree                     Show the tree of the current directory\n";
     std::cout << "   appletree /path/to/folder     Show the tree of the specified directory\n";
     std::cout << "   appletree -e node_modules     Exclude 'node_modules' from the tree\n";
     std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n\n";
+    std::cout << "   appletree -s round            Change the style (round corners)\n";
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
@@ -73,7 +98,7 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     for (size_t i = 0; i < entries.size(); ++i) {
         bool isLast = (i == entries.size() - 1);
         // std::cout << prefix << (isLast ? "└── " : "├── ") << entries[i].filename().string() << "\n";
-        std::cout << " " << prefix << (isLast ? "└── " : "├── ") << RESET;
+        std::cout << " " << prefix << branch(isLast) << RESET;
         if (fs::is_directory(entries[i])) {
             std::cout << BOLD << entries[i].filename().string() << "/" << RESET << "\n";
         } else {
@@ -83,7 +108,7 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
 
         // If directory then we call function recursively
         if (fs::is_directory(entries[i])) {
-            printTree(root, entries[i], prefix + (isLast ? "    " : "│   "));
+            printTree(root, entries[i], prefix + vertical(isLast));
         }
     }
 }
@@ -121,6 +146,21 @@ bool parseArgs(int argc, char* argv[], fs::path& root) {
                 onlyList.insert(argv[i]);
             }
             --i; // Change index after loop
+        }
+
+        // When using '-s'
+        else if (arg == "-s") {
+            if (i + 1 >= argc || argv[i + 1][0] == '-') {
+                std::cerr << "Error: Missing argument after '-s'. Specify 'classic' or 'round'.\n";
+                return false;
+            }
+            std::string style = argv[++i];
+            if (style == "classic") currentStyle = Style::classic;
+            else if (style == "round") currentStyle = Style::round;
+            else {
+                std::cerr << "Error: Unknown style '" << style << "'. Use 'classic' or 'round'.\n";
+                return false;
+            }
         }
 
         // If no flag is provided, it is the directory path.
