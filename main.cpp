@@ -48,14 +48,14 @@ void showHelp() {
 
     std::cout << " Styles:\n";
     std::cout << "   Available options ['classic' (default), 'round']\n";
-    std::cout << "   -s <style>    Change output style/format\n";
+    std::cout << "   -s <style>    Change output style/format\n\n";
 
     std::cout << " Examples:\n";
     std::cout << "   appletree                     Show the tree of the current directory\n";
     std::cout << "   appletree /path/to/folder     Show the tree of the specified directory\n";
     std::cout << "   appletree -e node_modules     Exclude 'node_modules' from the tree\n";
-    std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n\n";
-    std::cout << "   appletree -s round            Change the style (round corners)\n";
+    std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n";
+    std::cout << "   appletree -s round            Change the style (round corners)\n\n";
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
