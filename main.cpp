@@ -48,7 +48,7 @@ void showHelp() {
 
     std::cout << " Styles:\n";
     std::cout << "   Available options ['classic' (default), 'round']\n";
-    std::cout << "   -s <style>    Change output style/format\n\n";
+    std::cout << "   -s <style>   Change output style/format\n\n";
 
     std::cout << " Examples:\n";
     std::cout << "   appletree                     Show the tree of the current directory\n";
