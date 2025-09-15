@@ -41,32 +41,53 @@ std::string vertical(bool isLast) {
 
 // Help function
 void showHelp() {
-    std::cout << std::endl;
-    std::cout << " " << BOLD << "✨ appletree - Directory Tree Viewer ✨\n" << RESET;
-    std::cout << " Usage:\n";
+    std::cout << "\n";
+    std::cout << " " << BOLD << "✨ appletree – Directory Tree Viewer ✨" << RESET << "\n\n";
+    std::cout << BOLD << " Usage:" << RESET << "\n";
     std::cout << "   appletree [path] [options]\n\n";
 
-    std::cout << " Options:\n";
-    std::cout << "   -e <name>      Exclude files or directories from the tree output\n";
-    std::cout << "   -e .           Exclude hidden files or directories from the tree output\n";
-    std::cout << "   -o <name>      Show only the specified files or directories\n";
-    std::cout << "   -d <number>    Limit tree/recursion depth. Default: unlimited\n\n";
+    std::cout << BOLD << " Options:" << RESET << "\n";
+    std::cout << "   -e <pattern>     Exclude files or directories from the output.\n";
+    std::cout << "                      • If <pattern> is just a name (e.g. 'node_modules'),\n";
+    std::cout << "                        all entries with that basename are excluded anywhere.\n";
+    std::cout << "                      • If <pattern> contains '/' (e.g. 'src/main.cpp'),\n";
+    std::cout << "                        only that relative path (or subtree) is excluded.\n";
+    std::cout << "                      • Use '.' to exclude hidden files/dirs.\n\n";
 
-    std::cout << " Styles:\n";
-    std::cout << "   Available options ['classic' (default), 'round']\n";
-    std::cout << "   -s <style>   Change output style/format\n\n";
+    std::cout << "   -o <pattern>     Show only the specified files or directories.\n";
+    std::cout << "                      • Works like -e, but in reverse: restricts output to\n";
+    std::cout << "                        matching paths and their subtrees.\n";
+    std::cout << "                      • Parent folders are shown automatically so you can\n";
+    std::cout << "                        navigate to deep matches.\n\n";
 
-    std::cout << " Examples:\n";
-    std::cout << "   appletree                     Show the tree of the current directory\n";
-    std::cout << "   appletree /path/to/folder     Show the tree of the specified directory\n";
-    std::cout << "   appletree -e node_modules     Exclude 'node_modules' from the tree\n";
-    std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n";
-    std::cout << "   appletree -e . -d 2           Exclude hidden files & show tree of depth 2\n";
-    std::cout << "   appletree -s round            Change the style (round corners)\n\n";
+    std::cout << "   -d <number>      Limit recursion depth.\n";
+    std::cout << "                      • 0 = only show the root directory name.\n";
+    std::cout << "                      • 1 = root + its direct children.\n";
+    std::cout << "                      • n = root + n levels deep.\n";
+    std::cout << "                      • If omitted, the full tree is shown.\n\n";
+
+    std::cout << "   -s <style>       Change the drawing style of the tree.\n";
+    std::cout << "                      • 'classic' (default): ├── └── │\n";
+    std::cout << "                      • 'round':             ├── ╰── │ (rounded corners)\n\n";
+
+    std::cout << BOLD << " Examples:" << RESET << "\n";
+    std::cout << "   appletree                        Show the tree of the current directory\n";
+    std::cout << "   appletree /path/to/folder        Show the tree of the specified directory\n";
+    std::cout << "   appletree -e node_modules        Exclude all 'node_modules' folders\n";
+    std::cout << "   appletree -e src/main.cpp        Exclude only 'src/main.cpp'\n";
+    std::cout << "   appletree -o src                 Show only the 'src' subtree\n";
+    std::cout << "   appletree -o src/util/log.h      Show only that single file and its parents\n";
+    std::cout << "   appletree -e . -d 2              Exclude hidden files and limit depth to 2\n";
+    std::cout << "   appletree -s round               Use round corners for the tree\n\n";
+
+    std::cout << BOLD << " Notes:" << RESET << "\n";
+    std::cout << " • Multiple -e or -o patterns can be given in sequence.\n";
+    std::cout << " • Excludes take precedence over includes.\n";
+    std::cout << " • Hidden files: use -e . to skip them globally.\n\n";
 
     std::cout << " For more details, visit:\n";
     std::cout << "   " << BOLD << "https://github.com/mattialosz/appletree" << RESET << "\n\n";
-    std::cout << " \033[47;30m Created by @mattialoszach " << RESET << std::endl;
+    std::cout << " \033[47;30m Created by @mattialoszach " << RESET << "\n";
 }
 
 // Function to display the directory as a tree structure with filter options
