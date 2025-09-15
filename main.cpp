@@ -2,7 +2,9 @@
 #include <filesystem>
 #include <vector>
 #include <unordered_set>
+#include <optional>
 #include <algorithm>
+#include <cctype>
 
 // Macros for ANSI terminal output style
 #define RESET   "\033[0m"
@@ -13,6 +15,9 @@ namespace fs = std::filesystem;
 // Filter for flags/options
 std::unordered_set<std::string> excludeList;  // List for '-e'-flag
 std::unordered_set<std::string> onlyList;     // List for '-o'-flag
+
+// Depth limit (nullopt meaning unlimited)
+std::optional<size_t> maxDepth;
 
 // Style/Format
 enum class Style {classic, round};
@@ -42,9 +47,10 @@ void showHelp() {
     std::cout << "   appletree [path] [options]\n\n";
 
     std::cout << " Options:\n";
-    std::cout << "   -e <name>    Exclude files or directories from the tree output\n";
-    std::cout << "   -e .         Exclude hidden files or directories from the tree output\n";
-    std::cout << "   -o <name>    Show only the specified files or directories\n\n";
+    std::cout << "   -e <name>      Exclude files or directories from the tree output\n";
+    std::cout << "   -e .           Exclude hidden files or directories from the tree output\n";
+    std::cout << "   -o <name>      Show only the specified files or directories\n";
+    std::cout << "   -d <number>    Limit tree/recursion depth. Default: unlimited\n\n";
 
     std::cout << " Styles:\n";
     std::cout << "   Available options ['classic' (default), 'round']\n";
@@ -55,6 +61,7 @@ void showHelp() {
     std::cout << "   appletree /path/to/folder     Show the tree of the specified directory\n";
     std::cout << "   appletree -e node_modules     Exclude 'node_modules' from the tree\n";
     std::cout << "   appletree -o src include      Show only 'src' and 'include' directories\n";
+    std::cout << "   appletree -e . -d 2           Exclude hidden files & show tree of depth 2\n";
     std::cout << "   appletree -s round            Change the style (round corners)\n\n";
 
     std::cout << " For more details, visit:\n";
@@ -63,7 +70,12 @@ void showHelp() {
 }
 
 // Function to display the directory as a tree structure with filter options
-void printTree(const fs::path& root, const fs::path& current, const std::string& prefix = "") {
+void printTree(const fs::path& root, const fs::path& current, const std::string& prefix = "", size_t depth = 0) {
+    // Respect depth limit: if maxDepth is set and we've reached it, stop recursion
+    if (maxDepth.has_value() && depth >= maxDepth.value()) {
+        return;
+    }
+
     std::vector<fs::path> entries;
 
     // Collect all files & folders within the root directory
@@ -97,7 +109,7 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     // Iterate through collected entries and build tree structure
     for (size_t i = 0; i < entries.size(); ++i) {
         bool isLast = (i == entries.size() - 1);
-        // std::cout << prefix << (isLast ? "└── " : "├── ") << entries[i].filename().string() << "\n";
+
         std::cout << " " << prefix << branch(isLast) << RESET;
         if (fs::is_directory(entries[i])) {
             std::cout << BOLD << entries[i].filename().string() << "/" << RESET << "\n";
@@ -108,7 +120,7 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
 
         // If directory then we call function recursively
         if (fs::is_directory(entries[i])) {
-            printTree(root, entries[i], prefix + vertical(isLast));
+            printTree(root, entries[i], prefix + vertical(isLast), depth + 1);
         }
     }
 }
@@ -146,6 +158,29 @@ bool parseArgs(int argc, char* argv[], fs::path& root) {
                 onlyList.insert(argv[i]);
             }
             --i; // Change index after loop
+        }
+
+        // When using '-d'
+        else if (arg == "-d") {
+            if (i + 1 >= argc || argv[i + 1][0] == '-') {
+                std::cerr << "Error: Missing argument after '-d'. Specify a non-negative integer.\n";
+                return false;
+            }
+            std::string depthStr = argv[++i];
+
+            bool isStrDigit = std::all_of(depthStr.begin(), depthStr.end(), 
+                                            [](unsigned char c) { return std::isdigit(c); });
+            if (depthStr.empty() || !isStrDigit) {
+                std::cerr << "Error: Depth must be a non-negative integer (got '" << depthStr << "').\n";
+                return false;
+            }
+            try {
+                size_t d = std::stoul(depthStr);
+                maxDepth = d;
+            } catch(...) {
+                std::cerr << "Error: Failed to parse depth value '" << depthStr << "'.\n";
+                return false;
+            }
         }
 
         // When using '-s'
