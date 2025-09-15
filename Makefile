@@ -20,7 +20,7 @@ $(TARGET): $(SRCS)
 install: appletree
 	sudo cp appletree $(BINDIR)/
 	sudo chmod +x $(BINDIR)/appletree
-	@echo "✅ Installed to $(BINDIR)/appletreeh"
+	@echo "✅ Installed to $(BINDIR)/appletree"
 
 # === Remove executable from ~/.local/bin ===
 uninstall:
