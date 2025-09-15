@@ -109,6 +109,12 @@ appletree -o src include
 ```
 (This will display only the src and include directories.)
 
+- Limit Tree/Recursion Depth
+```bash
+appletree -d 2
+```
+(This will display only the first two levels of the tree.)
+
 
 - Display Help
 ```bash
