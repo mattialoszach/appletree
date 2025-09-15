@@ -79,26 +79,52 @@ void printTree(const fs::path& root, const fs::path& current, const std::string&
     std::vector<fs::path> entries;
 
     // Collect all files & folders within the root directory
-    for (const auto& entry : fs::directory_iterator(current)) {
-        std::string filename = entry.path().filename().string();
+    std::error_code ec;
+    for (fs::directory_iterator it(current, fs::directory_options::skip_permission_denied, ec);
+         !ec && it != fs::directory_iterator(); it.increment(ec)) {
 
-        if (!filename.empty() && excludeList.count(".") && filename[0] == '.') {
-            continue;
+        const auto& entry = *it;
+        const std::string filename = entry.path().filename().string();
+
+        // Hidden via "-e ."
+        if (!filename.empty() && excludeList.count(".") && filename[0] == '.') continue;
+
+        // Relative Path regarding root (for -e/-o)
+        std::string rel;
+        {
+            std::error_code ec2;
+            auto canon = fs::weakly_canonical(entry.path(), ec2);
+            if (ec2) continue; // skip
+            rel = canon.lexically_relative(root).generic_string();
         }
 
-        // Use '-e' to ignore files/folders
-        if (!excludeList.empty() && excludeList.count(filename)) continue;
-
-        // Use '-o' to ignore files/folders
-        bool isAllowed = false;
-        for (const auto& allowed : onlyList) {
-            if (filename == allowed || current.lexically_relative(root / allowed).string().find("..") == std::string::npos) {
-                isAllowed = true;
-                break;
+        // Exclude (-e)
+        bool isExcluded = false;
+        if (!excludeList.empty()) {
+            for (const auto& ex : excludeList) {
+                if (ex == ".") continue;
+                if (ex.find('/') != std::string::npos) {
+                    if (rel == ex || rel.rfind(ex + "/", 0) == 0) { isExcluded = true; break; }
+                } else {
+                    if (filename == ex) { isExcluded = true; break; }
+                }
             }
         }
-        // If '-o' is set and the file is not in 'onlyList' or within an '-o' folder, ignore it
-        if (!onlyList.empty() && !isAllowed) continue;          
+        if (isExcluded) continue;
+
+        // Only (-o)
+        bool isAllowed = onlyList.empty();
+        if (!onlyList.empty()) {
+            for (const auto& allowed : onlyList) {
+                if (rel == allowed || rel.rfind(allowed + "/", 0) == 0) { 
+                    isAllowed = true; break; 
+                }
+                if (allowed.rfind(rel + "/", 0) == 0) { 
+                    isAllowed = true; break; 
+                }
+            }
+        }
+        if (!isAllowed) continue;
 
         entries.push_back(entry.path());
     }
