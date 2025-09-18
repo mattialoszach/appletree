@@ -124,7 +124,7 @@ appletree -d 2
 ```bash
 appletree -s
 ```
-(Shows the size of each file and the total recursive size of each directory, like du -sh.)
+(Shows the size of each file and the total recursive size of each directory)
 
 
 - Display Help
