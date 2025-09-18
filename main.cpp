@@ -115,7 +115,8 @@ void showHelp() {
 
     std::cout << "   -s               Show file and directory sizes.\n";
     std::cout << "                      • Regular files: actual file size.\n";
-    std::cout << "                      • Directories: recursive total size (like du -sh).\n\n";
+    std::cout << "                      • Directories: recursive sum of contained file sizes.\n";
+    std::cout << "                      • Note: This may differ from 'du', which reports on-disk blocks.\n\n";
 
     std::cout << "   -t <theme>       Change the drawing theme of the tree.\n";
     std::cout << "                      • 'classic' (default): ├── └── │\n";
@@ -129,7 +130,7 @@ void showHelp() {
     std::cout << "   appletree -o src                 Show only the 'src' subtree\n";
     std::cout << "   appletree -o src/util/log.h      Show only that single file and its parents\n";
     std::cout << "   appletree -e . -d 2              Exclude hidden files and limit depth to 2\n";
-    std::cout << "   appletree -s                     Show file & folder sizes (like du -sh)\n";
+    std::cout << "   appletree -s                     Show file & folder sizes\n";
     std::cout << "   appletree -t round               Use round corners for the tree\n\n";
 
     std::cout << BOLD << " Notes:" << RESET << "\n";
