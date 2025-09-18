@@ -9,9 +9,12 @@ It helps you visualize folder structures with optional file filtering.
 
 ## 📌 Features
 - 📂 Display a tree-like structure of directories and files
-- ❌ Exclude specific files or folders (`-e`)
-- ✅ Show only selected files or folders (`-o`)
-- 🔧 Designed for **macOS** & **Linux**
+- ❌ Exclude specific files or folders (-e)
+- ✅ Show only selected files or folders (-o)
+- 📏 Limit recursion depth (-d)
+- 🎨 Choose a theme (-t classic or -t round)
+- 📦 Show file & directory sizes (-s)
+- 🔧 Designed for macOS & Linux
 - ⚡ Fast and lightweight
 
 ---
@@ -109,11 +112,19 @@ appletree -o src include
 ```
 (This will display only the src and include directories.)
 
+
 - Limit Tree/Recursion Depth
 ```bash
 appletree -d 2
 ```
 (This will display only the first two levels of the tree.)
+
+
+- Show File & Directory Sizes
+```bash
+appletree -s
+```
+(Shows the size of each file and the total recursive size of each directory, like du -sh.)
 
 
 - Display Help
@@ -124,14 +135,14 @@ appletree help
 
 ---
 
-You can change how the tree looks with the -s flag.
+You can change how the tree looks with the -t flag.
 Available options:
 - classic (default)
 - round
  
-Change Style/Format
+Change Theme/Format
 ```bash
-appletree -s round
+appletree -t round
 ```
 
 ## ⚡ Pro Tip: Aliases for faster workflow
@@ -140,7 +151,7 @@ This way you don’t have to type long commands every time.
 
 Example (zsh):
 ```bash
-alias atr="appletree -e . __pycache__ -s round"
+alias atr="appletree -e . __pycache__ -t round"
 ```
 Now you can simply type:
 ```bash
